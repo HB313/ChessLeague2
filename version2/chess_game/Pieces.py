@@ -84,35 +84,6 @@ class Pawn(Piece):
 
         return self.available_moves
 
-    def promote(self, new_piece_type):
-        print("promote est bien appelé")
-        print("new_piece_type:", new_piece_type)
-        
-        # Change le type de la pièce
-        self.type = new_piece_type
-        
-        # Utilise l'image déjà chargée pour le nouveau type de pièce
-        if self.color == "Black":
-            if new_piece_type == "Queen":
-                self = Queen(self.Square, Black_Queen,Black,"Queen",row,col)
-            elif new_piece_type == "Rook":
-                self = Rook(self.Square, Black_Rook,Black,"Rook",row,col)
-            elif new_piece_type == "Knight":
-                self = Knight(self.Square, Black_Knight,Black,"Knight",row,col)
-            elif new_piece_type == "Bishop":
-                self = Bishop(self.Square, Black_Bishop,Black,"Bishop",row,col)
-        elif self.color == "White":
-            if new_piece_type == "Queen":
-                self = Queen(self.Square, White_Queen,White,"Queen",row,col)
-            elif new_piece_type == "Rook":
-                self = Rook(self.Square, White_Rook,White,"Rook",row,col)
-            elif new_piece_type == "Knight":
-                self = Knight(self.Square, White_Knight,White,"Knight",row,col)
-            elif new_piece_type == "Bishop":
-                self = Bishop(self.Square, White_bishop,White,"Bishop",row,col)
-
-        print("Piece type after promotion:", self.type)
-
 
 
 

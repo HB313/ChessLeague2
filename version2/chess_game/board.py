@@ -73,11 +73,11 @@ class newBoard:
 
 
     def draw_Board(self):
-        self.Win.fill(brown)
+        self.Win.fill(Green)
 
         for row in range(Rows):
             for col in range(row%2, Cols,2):
-                pygame.draw.rect(self.Win,White,(Square*(row), Square*(col),Square,Square))
+                pygame.draw.rect(self.Win,beige,(Square*(row), Square*(col),Square,Square))
 
     def draw_piece(self,piece,Win):
         Win.blit(piece.image, (piece.x, piece.y))

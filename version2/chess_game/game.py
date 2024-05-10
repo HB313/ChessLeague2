@@ -19,15 +19,14 @@ class Game:
     def update_window(self):
 
         self.Board.draw_Board()
-        #Board.draw_test()
         self.Board.draw_pieces()
         self.draw_available_moves()
         pygame.display.update()
 
     def reset(self):
-        self.Board = newBoard(Width, Height, Rows, Cols,Square, Win)
-        self.Square = Square
+        self.Board = newBoard(Width, Height, Rows, Cols, Square, Win)
         self.selected = None
+        self.turn = White
 
     def check_game(self):
         if self.Black_pieces_left == 0:
@@ -54,10 +53,9 @@ class Game:
                 if Board[r][c] != 0:
                     if Board[r][c].color != piece.color:
                         moves = Board[r][c].get_available_moves(r,c,Board)
-                        #print(self.Board.Board[r][c].type, moves)
+                        
                         for move in moves:
                             enemies_moves.append(move)
-        #print("enemies_moves",enemies_moves)
         return enemies_moves
 
     def get_King_pos(self,Board):
@@ -126,42 +124,6 @@ class Game:
 
 
 
-    def promote_pawn(self, row, col):
-        print("La fonction promote_pawn est bien appelée")
-        # Afficher une interface pour choisir le type de pièce
-        print("Promote your pawn:")
-        print("1. Queen")
-        print("2. Rook")
-        print("3. Bishop")
-        print("4. Knight")
-
-        
-        choice = input("Enter your choice (1-4): ")
-
-            # Convertir le choix en type de pièce correspondant
-        if choice == "1":
-            new_piece_type = "Queen"
-            
-        elif choice == "2":
-            new_piece_type = "Rook"
-            
-        elif choice == "3":
-            new_piece_type = "Bishop"
-            
-        elif choice == "4":
-            new_piece_type = "Knight"
-            
-        else:
-            print("Invalid choice. Please enter a number between 1 and 4.")
-        print("le choix de l'utilisateur est : ", choice)
-        # Obtenir le pion actuel à promouvoir
-        pawn_to_promote = self.Board.get_piece(row, col)
-
-        # Promouvoir le pion
-        
-        pawn_to_promote.promote(new_piece_type)
-        self.change_turn()
-
 
     def select(self, row, col):
         if self.selected:
@@ -173,12 +135,9 @@ class Game:
         if piece != 0 and self.turn == piece.color:
             self.selected = piece
             self.valid_moves = piece.get_available_moves(row, col, self.Board.Board)
-            if isinstance(piece, Pawn) and (row == 0 or row == Rows - 1):  
-                self.promote_pawn(row, col)  # Appelle la méthode pour promouvoir le pion
-                self.change_turn()  # Change de tour après la promotion
-            else:
-                print("self valid_moves", self.valid_moves)
-                print("new valid_moves", self.valid_moves)
+            
+            print("self valid_moves", self.valid_moves)
+            print("new valid_moves", self.valid_moves)
 
     def _move(self, row, col):
         piece = self.Board.get_piece(row, col)
@@ -213,7 +172,7 @@ class Game:
         if len(self.valid_moves) > 0:
             for pos in self.valid_moves:
                 row,col = pos[0],pos[1]
-                pygame.draw.circle(self.Win, Green, (col*self.Square + self.Square//2, row*self.Square + self.Square//2),self.Square//8)
+                pygame.draw.circle(self.Win, brown, (col*self.Square + self.Square//2, row*self.Square + self.Square//2),self.Square//8)
 
     def get_board(self):
         return self.board

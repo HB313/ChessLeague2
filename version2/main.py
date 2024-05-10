@@ -1,55 +1,76 @@
 import pygame
-
 from chess_game.constants import *
 from chess_game.game import Game
-
 
 pygame.init()
 clock = pygame.time.Clock()
 
 Win = pygame.display.set_mode((Width, Height))
+pygame.display.set_caption("ChessLeague")
 
 def get_positions(x,y):
-    row = y//Square
-    col = x//Square
+    row = y // Square
+    col = x // Square
+    return row, col
 
-    return row,col
+def show_menu(screen):
+    screen.fill(Green)
+    font = pygame.font.Font(None, 36)
+    title_text = font.render("Menu", True, brown)
+    start_button = font.render("Start", True, brown)
 
+    title_rect = title_text.get_rect(center=(Width//2, Height//2 - 50))
+    start_button_rect = start_button.get_rect(center=(Width//2, Height//2))
+
+    screen.blit(title_text, title_rect)
+    screen.blit(start_button, start_button_rect)
+
+    pygame.display.flip()
 
 def main():
     run = True
     game_over = False
     turn = White
-    FPS = 60
-    game = Game(Width,Height,Rows,Cols,Square,Win)
+    FPS = 30
+    game = None
 
+    # Afficher le menu au début
+    show_menu(Win)
 
     while run:
         clock.tick(FPS)
 
-        game.update_window()
-        if game.check_game():
-            game_over = True
+        if not game_over and game is not None:
+            game.update_window()
+            if game.check_game():
+                game_over = True
             
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+                pygame.quit()
                 quit()
 
-            if event.type == pygame.KEYDOWN and game_over:
-                if event.key == pygame.K_SPACE and game_over:
-                    game.reset()
-
-
             if event.type == pygame.MOUSEBUTTONDOWN and not game_over:
-
                 if pygame.mouse.get_pressed()[0]:
                     location = pygame.mouse.get_pos()
-                    row,col = get_positions(location[0],location[1])
-                    #print(row,col)
-                    game.select(row,col)
+                    row, col = get_positions(location[0], location[1])
+                    if game is not None:
+                        game.select(row, col)
+                    else:
+                        game = Game(Width, Height, Rows, Cols, Square, Win)
 
+            if event.type == pygame.KEYDOWN and game_over:
+                if event.key == pygame.K_SPACE:
+                    game.reset()
+                    game_over = False
+                    game = Game(Width, Height, Rows, Cols, Square, Win)
 
+        if game_over:
+            show_menu(Win)
 
+    pygame.quit()
+    quit()
 
-main()
+if __name__ == "__main__":
+    main()
