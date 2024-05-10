@@ -24,10 +24,11 @@ class Game:
         self.draw_available_moves()
         pygame.display.update()
 
-    def reset(self):
+    def reset(self, Win):
         self.Board = newBoard(Width, Height, Rows, Cols, Square, Win)
         self.selected = None
         self.turn = White
+
 
     def check_game(self):
         if self.Black_pieces_left == 0:
@@ -68,8 +69,6 @@ class Game:
 
     def simulate_move(self, piece,row,col):
         piece_row, piece_col = piece.row, piece.col
-        print("piece row, col",piece_row, piece_col)
-        print(row,col)
         save_piece = self.Board.Board[row][col]
         if self.Board.Board[row][col] != 0:
             self.Board.Board[row][col] = 0
@@ -112,7 +111,6 @@ class Game:
         # Si le roi peut échapper, ce n'est pas un échec et mat
         for move in king_moves:
             if self.simulate_move(get_king, move[0], move[1]):
-                print("King can escape to:", move)
                 return False
 
         # Si le roi ne peut pas échapper, vérifiez si une autre pièce peut le sauver
@@ -123,7 +121,7 @@ class Game:
                     moves = piece.get_available_moves(r, c, Board.Board)
                     for move in moves:
                         if self.simulate_move(piece, move[0], move[1]):
-                            print("Piece at", (r, c), "can defend the king.")
+                            
                             return False
 
         print("Checkmate detected")

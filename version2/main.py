@@ -62,7 +62,7 @@ def main():
 
             if event.type == pygame.KEYDOWN and game_over:
                 if event.key == pygame.K_SPACE:
-                    game.reset()
+                    game.reset(Win)
                     game_over = False
                     game = Game(Width, Height, Rows, Cols, Square, Win)
 
