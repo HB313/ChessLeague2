@@ -5,6 +5,7 @@ from copy import deepcopy
 from .Pieces import Pawn
 
 
+
 class Game:
     def __init__(self, Width, Height, Rows, Cols, Square,Win):
         self.Win = Win
@@ -37,7 +38,7 @@ class Game:
             print("Blacks win")
             return True
 
-        if self.checkmate(self.Board):
+        if self.checkmate(self.Board) == True:
             if self.turn == White:
                 print("Black Wins")
                 return True
@@ -101,19 +102,32 @@ class Game:
         return possible_moves
 
 
-    def checkmate(self,Board):
-
+    def checkmate(self, Board):
         king_pos = self.get_King_pos(Board.Board)
         get_king = Board.get_piece(king_pos[0], king_pos[1])
         king_available_moves = set(get_king.get_available_moves(king_pos[0], king_pos[1], Board.Board))
-        enemies_moves_set = set(self.enemies_moves(get_king,Board.Board))
+        enemies_moves_set = set(self.enemies_moves(get_king, Board.Board))
         king_moves = king_available_moves - enemies_moves_set
-        set1 = king_available_moves.intersection(enemies_moves_set)
-        possible_moves_to_def = set1.intersection(self.possible_moves(Board.Board))
-        if len(king_moves) == 0 and len(king_available_moves) != 0 and possible_moves_to_def == 0:
-            return True
 
-        return False
+        # Si le roi peut échapper, ce n'est pas un échec et mat
+        for move in king_moves:
+            if self.simulate_move(get_king, move[0], move[1]):
+                print("King can escape to:", move)
+                return False
+
+        # Si le roi ne peut pas échapper, vérifiez si une autre pièce peut le sauver
+        for r in range(len(Board.Board)):
+            for c in range(len(Board.Board[r])):
+                piece = Board.Board[r][c]
+                if piece != 0 and piece.color == self.turn:
+                    moves = piece.get_available_moves(r, c, Board.Board)
+                    for move in moves:
+                        if self.simulate_move(piece, move[0], move[1]):
+                            print("Piece at", (r, c), "can defend the king.")
+                            return False
+
+        print("Checkmate detected")
+        return True
 
 
     def change_turn(self):
