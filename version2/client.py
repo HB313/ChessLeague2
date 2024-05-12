@@ -1,6 +1,7 @@
 import socket
 import pygame
 import sys
+from chess_game.constants import *
 
 class ChessClient:
     def __init__(self, host='localhost', port=65432):
@@ -34,7 +35,7 @@ class ChessClient:
 
 def main():
     pygame.init()
-    Win = pygame.display.set_mode((800, 800))
+    Win = pygame.display.set_mode((Width, Height))
     pygame.display.set_caption("Chess Client")
 
     client = ChessClient()

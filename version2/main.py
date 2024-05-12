@@ -30,12 +30,17 @@ def show_menu(screen):
 def show_Checkmate(screen):
         screen.fill(Green)
         font = pygame.font.Font(None, 72)
-        title_text = font.render("Checkmate ! :)", True, light_brown)
+        small_font = pygame.font.Font(None, 42)
 
+        title_text = font.render("Checkmate !", True, light_brown)
+        replay_text = small_font.render("Press Spacebar to play again :)", True, light_brown)
+        
         title_rect = title_text.get_rect(center=(Width//2, Height//2 - 50))
+        replay_rect = replay_text.get_rect(center=(Width//2, Height//2 + 50))
 
 
         screen.blit(title_text, title_rect)
+        screen.blit(replay_text, replay_rect)
 
 
         pygame.display.flip()
