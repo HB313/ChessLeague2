@@ -33,6 +33,7 @@ def client_thread(conn, addr):
         try:
             data = conn.recv(2048)
             reply = 'Server output: ' + data.decode('utf-8')
+            print(reply)
             if not data:
                 print(f"Connection with {addr} ended")
                 break
