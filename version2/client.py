@@ -7,6 +7,13 @@ import pygame
 from chess_game.constants import *
 from chess_game.game import Game
 
+
+pygame.init()
+clock = pygame.time.Clock()
+Win = pygame.display.set_mode((Width, Height))
+pygame.display.set_caption("ChessLeague")
+
+
 class ChessClient:
     def __init__(self, host='localhost', port=12345):
         self.host = host
@@ -23,10 +30,12 @@ class ChessClient:
             print("Error connecting to server: " + str(e))
             sys.exit()
 
+
     def send_move(self, row, col):
         try:
-            self.conn.sendall(str(row) + ',' + str(col)).encode('utf-8')
-
+            # Assurez-vous que la chaîne est convertie en bytes avant d'être envoyée
+            data = str(row) + ',' + str(col)
+            self.conn.sendall(data.encode('utf-8'))
             print("Sent move to server:", row, col)
         except socket.error as e:
             print("Failed to send move to server: " + str(e))
@@ -58,8 +67,7 @@ class ChessClient:
                             row, col = get_positions(location[0], location[1])
                             game.select(row, col)
                             self.send_move(row, col)
-            pygame.event.pump()  # Traiter les événements sans bloquer
-            pygame.time.delay(100)
+
 
 
 
@@ -73,7 +81,7 @@ class ChessClient:
                 print("Received move from server:", row, col)
                 # Utiliser les mouvements reçus pour mettre à jour l'état du jeu
                 # TODO: Mettre à jour l'état du jeu avec le mouvement reçu
-            pygame.time.delay(100)
+
 
 
 
@@ -115,11 +123,7 @@ def show_Checkmate(screen):
         pygame.display.flip()
 
 def main():
-    pygame.init()
-    clock = pygame.time.Clock()
-
-    Win = pygame.display.set_mode((Width, Height))
-    pygame.display.set_caption("ChessLeague")
+    
        
     run = True
     game_over = False
@@ -129,32 +133,20 @@ def main():
 
     client = ChessClient()
 
+    
     # Initialiser le jeu avant de démarrer les threads
     game = Game(Width, Height, Rows, Cols, Square, Win)
 
-    # Démarrer les threads
-    send_thread = threading.Thread(target=client.send_moves, args=(client, game, game_over))
-    receive_thread = threading.Thread(target=client.receive_moves, args=(client, game_over))
 
-    send_thread.start()
-    receive_thread.start()
 
-    # Attendre que les threads se terminent
-    send_thread.join()
-    receive_thread.join()
-
-   
-    show_menu(Win)
 
     while run:
         clock.tick(FPS)
-        client.receive_move()
-        
         if not game_over and game is not None:
             game.update_window()
             if game.check_game():
                 game_over = True
-            
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -162,13 +154,14 @@ def main():
                 quit()
 
             if event.type == pygame.MOUSEBUTTONDOWN and not game_over:
+                print("Mouse button down event detected")
                 if pygame.mouse.get_pressed()[0]:
                     location = pygame.mouse.get_pos()
                     row, col = get_positions(location[0], location[1])
                     if game is not None:
                         game.select(row, col)
                         client.send_move(row, col)
-                        
+
             if event.type == pygame.KEYDOWN and game_over:
                 if event.key == pygame.K_SPACE:
                     game.reset(Win)
@@ -181,6 +174,7 @@ def main():
 
     pygame.quit()
     quit()
+
 
 if __name__ == "__main__":
     main()

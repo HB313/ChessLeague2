@@ -41,6 +41,7 @@ def client_thread(conn, addr):
         except:
             continue
 
+
 # Fonction pour diffuser les messages à tous les clients connectés
 def broadcast(message, connection):
     for client in clients:
