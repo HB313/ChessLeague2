@@ -11,6 +11,7 @@ Square = Width//Rows
 Black = (0,0,0)
 White = (255,255,255)
 beige = (245,245,220)
+light_brown = (100, 50, 50)
 brown = (87,16,16)
 Green = (40,140,20)
 

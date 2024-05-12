@@ -1,4 +1,6 @@
 import pygame
+
+
 from .board import newBoard
 from .constants import *
 from copy import deepcopy
@@ -124,7 +126,7 @@ class Game:
                             
                             return False
 
-        print("Checkmate detected")
+        print("Checkmate")
         return True
 
 

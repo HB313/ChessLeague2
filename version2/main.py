@@ -15,17 +15,32 @@ def get_positions(x,y):
 
 def show_menu(screen):
     screen.fill(Green)
-    font = pygame.font.Font(None, 36)
+    font = pygame.font.Font(None, 46)
     title_text = font.render("Menu", True, brown)
     start_button = font.render("Start", True, brown)
 
-    title_rect = title_text.get_rect(center=(Width//2, Height//2 - 50))
-    start_button_rect = start_button.get_rect(center=(Width//2, Height//2))
+    title_rect = title_text.get_rect(center=(Width//2, Height//2 - 75))
+    start_button_rect = start_button.get_rect(center=(Width//2, Height//2 + 30))
 
     screen.blit(title_text, title_rect)
     screen.blit(start_button, start_button_rect)
 
     pygame.display.flip()
+
+def show_Checkmate(screen):
+        screen.fill(Green)
+        font = pygame.font.Font(None, 72)
+        title_text = font.render("Checkmate ! :)", True, light_brown)
+
+        title_rect = title_text.get_rect(center=(Width//2, Height//2 - 50))
+
+
+        screen.blit(title_text, title_rect)
+
+
+        pygame.display.flip()
+
+
 
 def main():
     run = True
@@ -67,7 +82,7 @@ def main():
                     game = Game(Width, Height, Rows, Cols, Square, Win)
 
         if game_over:
-            show_menu(Win)
+            show_Checkmate(Win)
 
     pygame.quit()
     quit()
