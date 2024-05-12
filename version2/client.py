@@ -159,6 +159,7 @@ def main():
                     location = pygame.mouse.get_pos()
                     row, col = get_positions(location[0], location[1])
                     if game is not None:
+                        game.select(received_move[0], received_move[1])
                         game.select(row, col)
                         client.send_move(row, col)
 
@@ -171,6 +172,7 @@ def main():
         if game_over:
             show_Checkmate(Win)
         pygame.display.flip()
+        received_move = client.receive_move()
 
     pygame.quit()
     quit()
